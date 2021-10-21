@@ -4,6 +4,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
+      - run: echo "${GITHUB_REF#refs/heads/}" # PRの番号が取得されてしまいます
+      - run: echo "${GITHUB_HEAD_REF}"
+      - run: echo "${{ github.ref }}"
       - name: Checkout
         uses: actions/checkout@v2
         with:
