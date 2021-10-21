@@ -1,12 +1,21 @@
 on: create
 jobs:
-  release-pr:
+  create-first-branches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Create branches
+        run: |
+          git checkout -b staging && git push origin staging
+          git checkout -b master && git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  create-release-pull-request:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
     timeout-minutes: 1
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Extract version
         shell: bash
         run: |
@@ -21,5 +30,3 @@ jobs:
           hub push
           hub pull-request -b main -m "Release ${{ steps.extract_version.outputs.version }}"
           hub pull-request -b staging -m "Release ${{ steps.extract_version.outputs.version }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
