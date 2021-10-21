@@ -1,16 +1,5 @@
 on: create
 jobs:
-  create-first-branches:
-    runs-on: ubuntu-latest
-    timeout-minutes: 1
-    steps:
-      - name: Create branches
-        run: |
-          git checkout -b staging && git push origin staging
-          git checkout -b master && git push origin master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   create-release-pull-request:
     if: ${{ contains(github.ref, 'refs/heads/release/') }}
     runs-on: ubuntu-latest
